@@ -1,0 +1,385 @@
+﻿@{
+    ViewBag.Title = "Order Management";
+}
+@section Scripts
+{
+    <script src="@Url.Content("~/Scripts/order.js")"></script>
+}
+@Html.Hidden("hdUrl", Url.Action("Action", "Order"))
+<h4 class="page-header" style="margin: 10px;">ORDER MANAGEMENT</h4>
+<div class="row">
+
+    <div class="form-inline">
+        <div class="form-group">
+            <label for="from">Month:</label>
+            <input type="text" class="form-control" style="width:100px;" id="month" value="@DateTime.Now.ToString("yyyy-MM")">
+        </div>
+        <div class="form-group">
+            <label for="to">Customer:</label>
+            <input list="cus" id="selCus" class="form-control" />
+            <datalist id="cus">
+                @foreach (var item in ViewBag.Customer)
+                {
+                    <option value="@item.ID"/>
+                }
+            </datalist>
+        </div>
+        <div class="form-group">
+            <label for="to">Status:</label>
+            <select class="form-control" id="selStatus">
+                <option></option>
+                <option value="Confirmed">Confirmed</option>
+                <option value="Inquiry">Inquiry</option>
+            </select>
+        </div>
+        <button type="button" id="btnSearch" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span>Search</button>
+
+    </div>
+    <button id="btnRegOrder" class="btn btn-primary" type="button" data-action="0" data-emp=""><span class="glyphicon glyphicon-file"></span>Register</button>
+    <button id="btnModify" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span>Modify</button>
+    <button id="btnCopy" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-copy"></span>Copy</button>
+    <button id="btnExport" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-export"></span>Export</button>
+    <button id="btnDel" data-ideaid="" type="button" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span>Delete</button>
+</div>
+<div class="table-responsive">
+    <table id="tbMainDefault" class="table table-bordered">
+        <thead>
+            <tr class="tbheader">
+                <th></th>
+                <th>Date</th>
+                <th>Cus Code</th>
+                <th>Customer Name</th>
+                <th>End User</th>
+                <th>CR/HR</th>
+                <th>Grade</th>
+                <th>Series</th>
+                <th>Surface</th>
+                <th>Thk</th>
+                <th>Wth</th>
+                <th>Ed</th>
+                <th>Qty(ton)</th>
+                <th>Base Price</th>
+                <th>Effect Price</th>
+                <th>Bidd Price</th>
+                <th>Contract No</th>
+                <th>Usg</th>
+                <th>Status</th>
+                <th>Employee</th>
+                <th>Delivery</th>
+                <th>Remark</th>
+            </tr>
+
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+<!-- Modal Register Visit -->
+<div id="mdRegOrder" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg" style="width: 90%;">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><span class="glyphicon glyphicon-envelope"></span>&nbsp;Modify Order</h4>
+            </div>
+            <div class="modal-body">
+                <form id="frmRegOrder" role="form" data-action="" data-id="">
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <td class="tdleft">
+                                        <label>Emp. Id</label></td>
+                                    <td>
+                                        <select class="form-control" id="txtEmpId">
+                                            <option></option>
+                                            @foreach (var item in ViewBag.Emp)
+                                            {
+                                                <option value="@item.EMP_ID.Trim()">@item.EMP_NAME</option>
+                                            }
+                                        </select>
+                                    </td>
+                                    <td class="tdleft">
+                                        <label>
+                                            Customer</label></td>
+                                    <td>
+                                        <input list="cus1" id="selCustomer" class="form-control" />
+                                        <datalist id="cus1">
+                                            @foreach (var item in ViewBag.Customer)
+                                            {
+                                                <option value="@item.ID.Trim()"/>
+                                            }
+                                        </datalist>
+
+                                    </td>
+
+                                    <td colspan="4">
+                                        <input type="text" id="txtCustName" class="form-control" />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="tdleft">
+                                        <label>
+                                          Order Date</label></td>
+                                    <td>
+                                        <input type="text" class="form-control" id="txtOrderDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                                    </td>
+                                    <td class="tdleft">
+                                        <label>
+                                            End User</label></td>
+                                    <td>
+                                        <input list="cus2" id="selEndUser" class="form-control" />
+                                        <datalist id="cus2">
+                                            @foreach (var item in ViewBag.EndUser)
+                                            {
+                                                <option value="@item.END_USER_ID"/>
+                                            }
+                                        </datalist>
+
+                                    </td>
+
+                                    <td colspan="4">
+                                        <input type="text" id="txtEndUser" class="form-control" />
+                                    </td>
+
+
+                                </tr>
+
+                                <tr>
+                                    <td class="tdleft">
+                                        <label>
+                                            Grade
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <select id="selGrade" class="form-control">
+                                            <option></option>
+                                            @foreach (var item in ViewBag.Code)
+                                            {
+                                                if (item.STD_CD_KIND.Trim() == "GRADE_GROUP")
+                                                {
+                                                @:<option value="@item.STD_CD_NAME.Trim()">@item.STD_CD_NAME</option>
+                                            }
+                                            }
+                                        </select>
+
+                                    </td>
+                                    <td class="tdleft">
+                                        <label>
+                                            Series
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <select id="selSeries" class="form-control">
+                                            <option></option>
+                                            <optgroup label="300">
+                                                <option value="304">304</option>
+                                                <option value="304L">304L</option>
+                                                <option value="304J1L">304J1L</option>
+                                                <option value="304J1">304J1</option>
+                                                <option value="304Cu">304Cu</option>
+                                                <option value="301">301</option>
+                                                <option value="321">321</option>
+                                                <option value="329">329</option>
+                                                <option value="316L">316L</option>
+                                                <option value="310">310</option>
+
+                                            </optgroup>
+                                            <optgroup label="400">
+                                                <option value="430">430</option>
+                                                <option value="430BF">430BF</option>
+                                                <option value="430FH">430FH</option>
+                                                <option value="430N1">430N1</option>
+                                                <option value="430M2">430M2</option>
+                                                <option value="430RE">430RE</option>
+                                                <option value="430J1L">430J1L</option>
+                                                <option value="409L">409L</option>
+                                                <option value="441">441</option>
+                                                <option value="445NF">445NF</option>
+                                                <option value="436">436</option>
+                                                <option value="436J1L">436J1L</option>
+                                                <option value="439">439</option>
+                                                <option value="420">420</option>
+                                                <option value="420J2">420J2</option>
+                                                <option value="410">410</option>
+                                                <option value="410S">410S</option>
+                                                <option value="429TP">429TP</option>
+                                            </optgroup>
+                                            <optgroup label="200">
+                                                <option value="204">204</option>
+                                                <option value="202">202</option>
+                                                <option value="201">201</option>
+                                            </optgroup>
+                                            @*  @foreach (var item in ViewBag.Code)
+                                            {
+                                                if (item.STD_CD_KIND.Trim() == "GRADE_SERIES")
+                                                {
+                                                @:<option value="@item.STD_CD_NAME.Trim()">@item.STD_CD_NAME</option>
+                                            }
+                                            }*@
+                                        </select>
+
+                                    </td>
+                                    <td class="tdleft">
+                                        <label>
+                                            Surface
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <select id="selSurface" class="form-control">
+                                            <option value="BA">BA</option>
+                                            <option value="2B">2B</option>
+                                            <option value="No. 1">No. 1</option>
+                                            <option value="2D">2D</option>
+                                            <option value="HL">HL</option>
+                                            <option value="No. 4">No. 4</option>
+                                        </select>
+
+                                    </td>
+                                    <td class="tdleft">
+                                        <label>
+                                            THK
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <input type="number" step="0.01" class="form-control" min="0" id="selTHK" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">
+                                        <label>
+                                            WTH
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <input type="number" step="0.01" class="form-control" min="0" id="selWTH" />
+                                    </td>
+                                    <td class="tdleft">
+                                        <label>
+                                            CR/HR</label></td>
+                                    <td>
+                                        <select class="form-control" id="selCr">
+                                            @foreach (var item in ViewBag.Code)
+                                            {
+                                                if (item.STD_CD_KIND.Trim() == "CRHR")
+                                                {
+                                                @:<option value="@item.STD_CD_NAME.Trim()">@item.STD_CD_NAME</option>
+                                            }
+                                            }
+
+                                        </select>
+                                    </td>
+                                    <td class="tdleft">
+                                        <label>
+                                            Edge
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <select id="selEdge" class="form-control">
+                                            @foreach (var item in ViewBag.Code)
+                                            {
+                                                if (item.STD_CD_KIND.Trim() == "EDGE")
+                                                {
+                                                @:<option value="@item.STD_CD_NAME.Trim()">@item.STD_CD_NAME</option>
+                                            }
+                                            }
+                                        </select>
+                                    </td>
+                                    <td class="tdleft">
+                                        <label>
+                                            Base Price</label></td>
+                                    <td>
+                                        <input type="number" min="0" step="0.01" id="txtBasePrice" class="form-control" />
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">
+                                        <label>
+                                            Effective Price</label></td>
+                                    <td>
+                                        <input type="number" min="0" step="0.01" id="txtEffPrice" class="form-control" />
+                                    </td>
+
+                                    <td class="tdleft">
+                                        <label>
+                                            Bidding Price</label></td>
+                                    <td>
+                                        <input type="number" min="0" step="0.01" id="txtBidPrice" class="form-control" />
+                                    </td>
+                                    <td class="tdleft">
+                                        <label>
+                                            Order No
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" id="txtOrderNo" />
+                                    </td>
+                                    <td class="tdleft">
+                                        <label>
+                                            Order Usage
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <input type="text" id="selUsage" class="form-control" />
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">
+                                        <label>
+                                            Quantity(ton)
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <input type="number" min="0" class="form-control" id="txtQuantity" />
+                                    </td>
+                                    <td class="tdleft">
+                                        <label>
+                                            Status
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <select id="selStt" class="form-control">
+                                            <option value="Confirmed">Confirmed</option>
+                                            <option value="Inquiry">Inquiry</option>
+                                        </select>
+                                    </td>
+                                    <td class="tdleft">
+                                        <label>
+                                            Delivery Time
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" id="txtDelivery" value="@DateTime.Now.ToString("yyyy-MM")" />
+                                    </td>
+                                    <td class="tdleft">
+                                        <label>
+                                            Remark
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <textarea class="form-control" id="txtRemark"></textarea>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <button id="btnSave" class="btn btn-primary" type="submit" data-action="0" data-emp=""><span class="glyphicon glyphicon-floppy-disk"></span>Save</button>
+                        </div>
+                        <div class="col-md-8"></div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>

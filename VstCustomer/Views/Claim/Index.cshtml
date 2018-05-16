@@ -1,0 +1,330 @@
+﻿@{
+    ViewBag.Title = "Service";
+}
+@section Scripts
+{
+    <script src="@Url.Content("~/Scripts/claim.js")"></script>
+}
+@Html.Hidden("hdUrl", Url.Action("Action", "Claim"))
+@Html.Hidden("hdUrl1", Url.Action("Action", "Order"))
+<h4 class="page-header" style="margin: 10px;">CLAIM MANAGEMENT</h4>
+<div class="row">
+    <div class="col-sm-8">
+        <div class="form-inline">
+            <div class="form-group">
+                <label for="from">Month:</label>
+                <input type="text" class="form-control" id="month" value="@DateTime.Now.ToString("yyyy-MM")" style="width:100px;">
+            </div>
+            <div class="form-group">
+                <label for="to">Customer:</label>
+                <input list="cus" id="selCus" class="form-control" />
+                <datalist id="cus">
+                    @foreach (var item in ViewBag.Customer)
+                    {
+                        <option value="@item.ID"/>
+                    }
+                </datalist>
+            </div>
+            <div class="form-group">
+                <label for="to">Status:</label>
+                <select class="form-control" id="selStatus">
+                    <option></option>
+                    @foreach (var item in ViewBag.ClaimStatus)
+                    {
+                        <option value="@item.STD_CD_NAME.Trim()">@item.STD_CD_NAME</option>
+                    }
+                </select>
+            </div>
+
+            <button type="button" id="btnSearch" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span>Search</button>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <button id="btnRegOrder" class="btn btn-primary" type="button" data-action="0" data-emp=""><span class="glyphicon glyphicon-file"></span>Register</button>
+        <button id="btnModify" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span>Modify</button>
+        <button id="btnExport" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-export"></span>Export</button>
+        <button id="btnDel" data-ideaid="" type="button" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span>Delete</button>
+    </div>
+</div>
+<div class="table-responsive">
+    <table id="tbMainDefault" class="table table-bordered">
+        <thead>
+            <tr class="tbheader">
+                <th></th>
+                <th>Claim Date</th>
+                <th>Customer Name</th>
+                <th>End User</th>
+                <th>Location</th>
+                <th>Coil No</th>
+                <th>Spec</th>
+                <th>Surface</th>
+                <th>Thk</th>
+                <th>Wth</th>
+                <th>Net Wgt</th>
+                <th>Claim Wgt</th>
+                <th>Visit Date</th>
+                <th style="min-width: 200px;">Content</th>
+                <th>Defected Kind</th>
+                <th>Employee</th>
+            </tr>
+
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+<!-- Modal Register Visit -->
+<div id="mdRegOrder" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg" style="width: 90%;">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><span class="glyphicon glyphicon-envelope"></span>&nbsp;Modify Claim</h4>
+            </div>
+            <div class="modal-body">
+                <form id="frmRegOrder" role="form" data-action="0" data-id="" data-emp="">
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <td class="tdleft">
+                                        <label>Emp. Id</label></td>
+                                    <td>
+                                        <select class="form-control" id="txtEmpId" required="required">
+                                            <option></option>
+                                            @foreach (var item in ViewBag.Emp)
+                                            {
+                                                <option value="@item.EMP_ID.Trim()">@item.EMP_NAME</option>
+                                            }
+                                        </select>
+
+                                    </td>
+                                    <td class="tdleft">
+                                        <label>
+                                            Customer
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <input list="cusid" id="txtCusId" class="form-control" />
+                                        <datalist id="cusid">
+                                            @foreach (var item in ViewBag.Customer)
+                                            {
+                                                <option value="@item.ID"/>
+                                            }
+                                        </datalist>
+
+                                    </td>
+
+                                    <td colspan="4">
+                                        <input type="text" class="form-control" id="txtCusName" />
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+
+                                    <td class="tdleft">
+                                        <label>
+                                            Coil No</label></td>
+                                    <td>
+                                        <input type="text" class="form-control" id="txtCoilNo" />
+                                    </td>
+                                    <td class="tdleft">
+                                        <label>
+                                            End User
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <input list="end" id="txtEndUser" class="form-control" />
+                                        <datalist id="end">
+                                            @foreach (var item in ViewBag.EndUser)
+                                            {
+                                                <option value="@item.END_USER_ID"/>
+                                            }
+                                        </datalist>
+
+                                    </td>
+
+                                    <td colspan="4">
+                                        <input type="text" class="form-control" id="txtEndName" />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="tdleft">
+                                        <label>
+                                           Claim Date
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <input type="text" id="txtDate" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+
+                                    </td>
+
+                                    <td class="tdleft">
+                                        <label>
+                                            Claim Wgt
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <input type="number" min="0" step="0.01" id="txtClmWgt" class="form-control" />
+                                    </td>
+                                    <td class="tdleft">
+                                        <label>
+                                            Net Wgt
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <input type="number" min="0" step="0.01" id="txtNetWgt" class="form-control" /></td>
+                                    <td class="tdleft">
+                                        <label>Surface</label></td>
+                                    <td>
+                                        <input type="text" id="txtSurface" class="form-control" maxlength="2" /></td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">
+                                        <label>
+                                            Visit Date
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <input type="text" id="txtVisitDate" class="form-control" />
+                                    </td>
+                                    <td class="tdleft">
+                                        <label>
+                                            Defect Code</label></td>
+                                    <td>
+                                        <input type="text" id="txtDefectCd" class="form-control" maxlength="2" />
+                                    </td>
+                                    <td class="tdleft">
+                                        <label>
+                                            Defect Line</label></td>
+                                    <td>
+                                        <select id="selDefectLn" class="form-control">
+                                            @foreach (var item in ViewBag.DefectLine)
+                                            {
+                                                <option value="@item.STD_CD_NAME.Trim()">@item.STD_CD_NAME</option>
+                                            }
+                                        </select>
+                                    </td>
+                                    <td class="tdleft">
+                                        <label>
+                                            Deffect Kind</label></td>
+                                    <td>
+                                        <input type="text" id="txtDeffKind" class="form-control" />
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">
+                                        <label>
+                                            Finish Date
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" id="txtFinish" />
+                                    </td>
+                                    <td class="tdleft">
+                                        <label>
+                                            Compenstation
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <input type="number" min="0" step="0.01" class="form-control" id="txtCompensation" />
+                                    </td>
+                                    <td class="tdleft">
+                                        <label>
+                                            Content
+                                        </label>
+                                    </td>
+                                    <td colspan="4">
+                                        <textarea class="form-control" id="txtContent"></textarea>
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+                                    <td class="tdleft">
+                                        <label>
+                                            Spec
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <input type="text" id="txtSpec" class="form-control" />
+
+                                    </td>
+
+                                    <td class="tdleft">
+                                        <label>
+                                            Thk
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <input type="number" min="0" step="0.01" id="txtThk" class="form-control" />
+                                    </td>
+                                    <td class="tdleft">
+                                        <label>
+                                            Wth
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <input type="number" min="0" step="0.01" id="txtWth" class="form-control" /></td>
+                                    <td class="tdleft">
+                                        <label>
+                                            Grade
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <select id="txtGrade" class="form-control">
+                                            <option value="Second">Second</option>
+                                            <option value="Prime">Prime</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+
+                                    <td class="tdleft">
+                                        <label>
+                                            Status</label></td>
+                                    <td>
+                                        <select id="selStt" class="form-control">
+                                            @foreach (var item in ViewBag.ClaimStatus)
+                                            {
+                                                <option value="@item.STD_CD_NAME.Trim()">@item.STD_CD_NAME</option>
+                                            }
+                                        </select>
+                                    </td>
+                                    <td class="tdleft">
+                                        <label>Group</label></td>
+                                    <td>
+                                        <select id="selGroup" class="form-control">
+                                            <option value="Domestic">Domestic</option>
+                                            <option value="Export">Export</option>
+                                        </select>
+                                    </td>
+                                    <td class="tdleft">
+                                        <label>Attachment</label></td>
+                                    <td class="upload">
+                                       <input type="file" name="upload" id="upload" data-path="">
+                                    </td>
+                                    <td colspan="4"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <button id="btnSave" class="btn btn-primary" type="submit" data-action="0" data-emp=""><span class="glyphicon glyphicon-floppy-disk"></span>Save</button>
+                        </div>
+                        <div class="col-md-8"></div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>

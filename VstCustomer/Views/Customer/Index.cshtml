@@ -1,0 +1,341 @@
+﻿@{
+    ViewBag.Title = "Standard Customer";
+}
+@section Scripts
+{
+    <script src="@Url.Content("~/Scripts/customer.js")"></script>
+}
+@Html.Hidden("hdUrl", Url.Action("Action", "Customer"))
+<h4 class="page-header" style="margin: 10px;">STANDARD CUSTOMER</h4>
+<div class="row">
+    <div class="col-md-8">
+    </div>
+    <div class="col-md-4">
+        <button id="btnRegCus" class="btn btn-primary" type="button" data-action="0" data-emp=""><span class="glyphicon glyphicon-file"></span>New</button>
+        <button id="btnModify" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span>Modify</button>
+        <button id="btnAddEndUser" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span>Add End User</button>
+        <button id="btnDel" data-ideaid="" type="button" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span>Delete</button>
+    </div>
+</div>
+<div class="table-responsive">
+    <table id="tbMainDefault" class="table table-bordered">
+        <thead>
+            <tr class="tbheader">
+                <th></th>
+                <th>Customer No</th>
+                <th>Name</th>
+                <th>Location</th>
+                <th>Person</th>
+                <th>Group</th>
+                <th>End User</th>
+            </tr>
+
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+<!-- Modal Register Visit -->
+<div id="mdRegCus" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg" style="width: 90%;">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><span class="glyphicon glyphicon-envelope"></span>&nbsp;Modify Customer</h4>
+            </div>
+            <div class="modal-body">
+                <form id="frmRegCus" role="form" data-id="">
+
+                    <div class="table-responsive">
+                        <table id="tbCustomer" class="table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <td class="tdleft">
+                                        <label>Customer</label></td>
+                                    <td>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="txtCusId" required="required" />
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-primary" type="button" id="btnChange" data-id="">
+                                                    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>Change Code
+                                                </button>
+                                            </span>
+                                        </div>
+
+                                    </td>
+
+                                    <td colspan="4">
+                                        <input type="text" class="form-control" id="txtCusName" required="required" />
+                                    </td>
+
+                                    <td class="tdleft">
+                                        <label>Class</label></td>
+                                    <td>
+                                        <select class="form-control" id="selClass">
+                                            <option value="S">S</option>
+                                            <option value="U">U</option>
+                                            <option value="P">P</option>
+                                            <option value="R">R</option>
+                                            <option value="E">E</option>
+                                        </select>
+                                    </td>
+
+                                </tr>
+
+
+                                <tr>
+                                    <td class="tdleft">
+                                        <label>
+                                            Address
+                                        </label>
+                                    </td>
+                                    <td colspan="4">
+                                        <input type="text" id="txtAddress" class="form-control" />
+
+                                    </td>
+
+                                    <td class="tdleft">
+                                        <label>
+                                            TEL
+                                        </label>
+                                    </td>
+                                    <td colspan="2">
+                                        <input type="text" id="txtTel" class="form-control" />
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">
+                                        <label>
+                                            Location
+                                        </label>
+                                    </td>
+                                    <td colspan="4">
+                                        <input type="text" id="txtLoc" class="form-control" />
+                                    </td>
+                                    <td class="tdleft">
+                                        <label>
+                                            Fax</label>
+
+                                    </td>
+                                    <td colspan="2">
+                                        <input type="text" id="txtFax" class="form-control" />
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">
+                                        <label>
+                                            Established
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" id="txtEs" />
+                                    </td>
+                                    <td class="tdleft" colspan="2">
+                                        <label>
+                                            Contact with Posco
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" id="txtContact" />
+                                    </td>
+                                    <td class="tdleft">
+                                        <label>Group</label></td>
+                                    <td colspan="4">
+                                        <select class="form-control" id="selGroup">
+                                            <option value="DOMESTIC">DOMESTIC</option>
+                                            <option value="EXPORT">EXPORT</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="12">
+                                        <label>Contact Area</label></td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft" colspan="2">
+                                        <label>
+                                            Person
+                                        </label>
+                                    </td>
+                                    <td class="tdleft">
+                                        <label>
+                                            Birthday
+                                        </label>
+                                    </td>
+                                    <td class="tdleft">
+                                        <label>
+                                            Position
+                                        </label>
+                                    </td>
+                                    <td class="tdleft">
+                                        <label>
+                                            Mobile
+                                        </label>
+                                    </td>
+                                    <td class="tdleft">
+                                        <label>
+                                            Email
+                                        </label>
+                                    </td>
+                                    <td class="tdleft" colspan="2">
+                                        <label>
+                                            Sex
+                                        </label>
+                                    </td>
+
+                                </tr>
+                                <tr id="trAdd">
+
+                                    <td colspan="2">
+                                        <input type="text" id="txtPerson" class="form-control" />
+
+                                    </td>
+
+                                    <td>
+                                        <input type="date" id="txtBirthday" class="form-control" />
+                                    </td>
+                                    <td>
+                                        <input type="text" id="txtPos" class="form-control" />
+                                    </td>
+                                    <td>
+                                        <input type="text" id="txtMobile" class="form-control" />
+                                    </td>
+                                    <td>
+                                        <input type="email" id="txtEmail" class="form-control" />
+                                    </td>
+
+                                    <td colspan="2">
+                                        <div class="input-group">
+                                            <select class="form-control" id="selSex">
+                                                <option value="Male">Male</option>
+                                                <option value="Female">Female</option>
+                                            </select>
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-primary" type="button" id="btnAdd">
+                                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">
+                                        <label>Application</label>
+                                    </td>
+                                    <td colspan="8">
+                                        <textarea id="txtApp" class="form-control"></textarea>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">
+                                        <label>Special Desc</label></td>
+                                    <td colspan="8">
+                                        <textarea id="txtDesc" class="form-control"></textarea>
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <button id="btnSave" class="btn btn-primary" type="submit" data-action="0" data-emp=""><span class="glyphicon glyphicon-floppy-disk"></span>Save</button>
+                        </div>
+                        <div class="col-md-8"></div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- Modal End User -->
+<div id="mdEnd" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><span class="glyphicon glyphicon-envelope"></span>&nbsp;Add End User</h4>
+            </div>
+            <div class="modal-body">
+                <form id="frmEnd" role="form" data-id="">
+
+                    <div class="table-responsive">
+                        <table id="tbEnd" class="table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <td class="tdleft">
+                                        <label>Customer Id</label></td>
+                                    <td>
+                                        <input type="text" class="form-control" id="txtCus_Id" required="required" />
+                                    </td>
+                                    <td class="tdleft">
+                                        <label>End User ID</label></td>
+                                    <td>
+                                        <input type="text" class="form-control" id="txtEndId" required="required" />
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+
+                                    <td class="tdleft">
+                                        <label>End User Name</label></td>
+                                    <td colspan="5">
+                                        <input type="text" class="form-control" id="txtEndName" required="required" />
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <button class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-floppy-disk"></span>Save</button>
+                        </div>
+                        <div class="col-md-8"></div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+<div id="mdListEnd" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><span class="glyphicon glyphicon-envelope"></span>&nbsp;List End User</h4>
+            </div>
+            <div class="modal-body">
+                <table id="tbEndUser" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Customer ID</th>
+                            <th>End User ID</th>
+                            <th>End User Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                       
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>

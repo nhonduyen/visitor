@@ -1,0 +1,197 @@
+﻿@{
+    ViewBag.Title = "Visit";
+}
+@section Scripts
+{
+    <script src="@Url.Content("~/Scripts/visit.js")"></script>
+}
+@Html.Hidden("hdUrl1", Url.Action("Action", "Home"))
+@Html.Hidden("hdUrl", Url.Action("Action", "Visit"))
+<h4 class="page-header" style="margin: 10px;">VISIT HISTORY</h4>
+<div class="row">
+
+    <div class="form-inline">
+        <div class="form-group">
+            <label for="from">From:</label>
+            <input type="text" class="form-control" id="from" value="@DateTime.Now.AddMonths(-1).ToString("yyyy-MM-dd")">
+        </div>
+        <div class="form-group">
+            <label for="from">To:</label>
+            <input type="text" class="form-control" id="to" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+        </div>
+        <div class="form-group">
+            <label for="to">Customer:</label>
+            <input list="cusid1" id="selCus" class="form-control" />
+            <datalist id="cusid1">
+                @foreach (var item in ViewBag.Customer)
+                {
+                    <option value="@item.ID"/>
+                }
+            </datalist>
+
+        </div>
+        <div class="form-group">
+            <label for="to">Employee:</label>
+            <select class="form-control" id="selEmp">
+                <option></option>
+                @foreach (var item in ViewBag.Emp)
+                {
+                    <option value="@item.EMP_ID">@item.EMP_NAME.Trim()</option>
+                }
+            </select>
+        </div>
+        <button type="button" id="btnSearch" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span>Search</button>
+
+    </div>
+
+</div>
+<button id="btnRegOrder" class="btn btn-primary" type="button" data-action="0" data-emp=""><span class="glyphicon glyphicon-file"></span>Register</button>
+<button id="btnModify" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span>Modify</button>
+<button id="btnCopy" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-copy"></span>Copy</button>
+<button id="btnDel" data-ideaid="" type="button" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span>Delete</button>
+<div class="table-responsive">
+    <table id="tbMainDefault" class="table table-bordered">
+        <thead>
+            <tr class="tbheader">
+                <th></th>
+                <th>Date</th>
+                <th>Customer Code</th>
+                <th>Customer Name</th>
+                <th>Visit Type</th>
+                <th>Purpose</th>
+                <th>Content</th>
+                <th>Employee</th>
+
+            </tr>
+
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+<!-- Modal Register Visit -->
+<div id="mdRegVisit" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><span class="glyphicon glyphicon-envelope"></span>&nbsp;Modify Customer Visit</h4>
+            </div>
+            <div class="modal-body">
+                <form id="frmRegVisit" role="form" data-id="" data-emp="" data--action="">
+                    <div class="row">
+                        <div class="col-sm-8"></div>
+                        <div class="col-sm-4">
+                            <button id="btnSave" class="btn btn-primary" type="submit" data-action="0" data-emp=""><span class="glyphicon glyphicon-floppy-disk"></span>Save</button>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <td class="tdleft">
+                                        <label>Emp. Id</label></td>
+                                    <td>
+                                        <select class="form-control" id="txtEmpId" required="required">
+                                            <option></option>
+                                            @foreach (var item in ViewBag.Emp)
+                                            {
+                                                <option value="@item.EMP_ID">@item.EMP_NAME.Trim()</option>
+                                            }
+                                        </select>
+
+                                    </td>
+                                    <td class="tdleft">
+                                        <label>
+                                            Date</label></td>
+                                    <td>
+                                        <input type="text" class="form-control" id="txtDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                                    </td>
+                                    <td></td>
+                                </tr>
+
+                                <tr>
+
+
+                                    <td class="tdleft">
+                                        <label>
+                                            Customer</label></td>
+                                    <td>
+                                        <input list="cusid" id="selCustomer" class="form-control" />
+                                        <datalist id="cusid">
+                                            @foreach (var item in ViewBag.Customer)
+                                            {
+                                                <option value="@item.ID"/>
+                                            }
+                                        </datalist>
+
+                                    </td>
+
+                                    <td colspan="3">
+                                        <input type="text" class="form-control" id="txtCus" />
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+                                    <td class="tdleft">
+                                        <label>
+                                            Constractor
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <select id="selContact" class="form-control">
+                                        </select>
+
+                                    </td>
+                                    <td>
+                                        <select id="selType" class="form-control">
+                                            @foreach (var item in ViewBag.Code)
+                                            {
+                                                if (@item.STD_CD_KIND.Trim() == "VISIT_TYPE")
+                                                {
+                                                @:<option value="@item.STD_CD_NAME.Trim()">@item.STD_CD_NAME.Trim()</option>
+                                                }
+                                            }
+                                        </select>
+
+                                    </td>
+                                    <td class="tdleft">
+                                        <label>
+                                            Purpose
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <select id="selPurpose" class="form-control">
+                                            @foreach (var item in ViewBag.Code)
+                                            {
+                                                if (@item.STD_CD_KIND.Trim() == "VISIT_PURPOSE")
+                                                {
+                                                @:<option value="@item.STD_CD_NAME.Trim()">@item.STD_CD_NAME.Trim()</option>
+                                                }
+                                            }
+                                        </select>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">
+                                        <label>
+                                            Content
+                                        </label>
+                                    </td>
+                                    <td colspan="5">
+                                        <textarea class="form-control" id="txtRemark"></textarea></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>

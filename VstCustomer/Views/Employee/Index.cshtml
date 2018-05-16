@@ -1,0 +1,158 @@
+﻿@{
+    ViewBag.Title = "Standard Employee";
+}
+@section Scripts
+{
+    <script src="@Url.Content("~/Scripts/employee.js")"></script>
+}
+@Html.Hidden("hdUrl", Url.Action("Action", "Employee"))
+<h4 class="page-header" style="margin: 10px;">STANDARD EMPLOYEE</h4>
+<div class="row">
+    <div class="col-md-6">
+    </div>
+    <div class="col-md-6">
+        <button id="btnRegEmp" class="btn btn-primary" type="button" data-action="0"><span class="glyphicon glyphicon-file"></span>New</button>
+        <button id="btnModify" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span>Modify</button>
+        <button id="btnDel" type="button" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span>Delete</button>
+        <button id="btnReset" type="button" class="btn btn-danger"><span class="glyphicon glyphicon-wrench"></span>Reset Password</button>
+    </div>
+</div>
+<div class="table-responsive">
+    <table id="tbMainDefault" class="table table-bordered">
+        <thead>
+            <tr class="tbheader">
+                <th></th>
+                <th>Name</th>
+                <th>Employee No</th>
+                <th>REP Customer Cd</th>
+                <th>REP Customer Name</th>
+                <th>Mobile</th>
+                <th>Email</th>
+
+            </tr>
+
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+<!-- Modal Register Visit -->
+<div id="mdRegCus" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><span class="glyphicon glyphicon-envelope"></span>&nbsp;Modify Employee</h4>
+            </div>
+            <div class="modal-body">
+                <form id="frmRegEmp" data-action="0" role="form">
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <td class="tdleft">
+                                        <label>Emp.Id</label></td>
+                                    <td>
+                                        <input type="text" class="form-control" id="txtEmpId" maxlength="6" required="required" />
+                                    </td>
+
+                                    <td colspan="2">
+                                        <input type="text" class="form-control" id="txtEmpName" required="required" />
+                                    </td>
+
+                                    <td class="tdleft">
+                                        <label>Dept</label></td>
+                                    <td colspan="4">
+                                        <select class="form-control" id="selDept">
+                                            <option></option>
+                                            @foreach (var item in ViewBag.EMPS)
+                                            {
+                                                <option value="@item.EMP_DEPT.Trim()">@item.EMP_DEPT.Trim()</option>
+                                            }
+
+                                        </select>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="tdleft">
+                                        <label>
+                                            Email
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <input type="email" class="form-control" id="txtEmail" />
+                                    </td>
+                                    <td class="tdleft">
+                                        <label>
+                                            Mobile
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" id="txtMobile" />
+                                    </td>
+                                    <td class="tdleft">
+                                        <label>Role</label></td>
+                                    <td colspan="4">
+                                        <select class="form-control" id="selRole">
+                                            <option value="0">Employee</option>
+                                            <option value="1">Manager</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="input-group">
+                                            <input list="cusid" id="selCus" class="form-control" />
+                                            <datalist id="cusid">
+                                                @foreach (var item in ViewBag.CUSTOMERS)
+                                                {
+                                                    <option value="@item.ID"/>
+                                                }
+                                            </datalist>
+
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-primary" type="button" id="btnAdd">
+                                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td colspan="8"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                    <div class="table-responsive">
+                        <table id="tbCus" class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Customer Cd</th>
+                                    <th>Name</th>
+                                    <th>Grade</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <button id="btnSave" class="btn btn-primary" type="submit" data-action="0" data-emp=""><span class="glyphicon glyphicon-floppy-disk"></span>Save</button>
+                            <button id="btnDelete" class="btn btn-danger" type="button" data-action="0" data-emp=""><span class="glyphicon glyphicon-remove"></span>Delete</button>
+                        </div>
+                        <div class="col-md-8"></div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
