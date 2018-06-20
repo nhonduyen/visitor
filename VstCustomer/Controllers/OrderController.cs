@@ -56,14 +56,14 @@ namespace VstCustomer.Controllers
                 columns.Add(i.STS_ST_CLS);
                 columns.Add(i.STS_ST_SER);
                 columns.Add(i.SURFACE_CD);
-                columns.Add(i.ORD_THK == null ? "" : i.ORD_THK.ToString());
-                columns.Add(i.ORD_WTH == null ? "" : i.ORD_WTH.ToString());
+                columns.Add(i.ORD_THK == null ? "" : Math.Round(Convert.ToDouble(i.ORD_THK), 2, MidpointRounding.ToEven).ToString());
+                columns.Add(i.ORD_WTH == null ? "" : Math.Round(Convert.ToDouble(i.ORD_WTH), 2, MidpointRounding.ToEven).ToString());
                 columns.Add(i.ORD_EDGE == null ? "" : i.ORD_EDGE.ToString());
-                columns.Add(i.QUANTITY == null ? "" : i.QUANTITY.ToString());
+                columns.Add(i.QUANTITY == null ? "" : Math.Round(Convert.ToDouble(i.QUANTITY), 2, MidpointRounding.ToEven).ToString());
                 //columns.Add(i.ORD_WGT == null ? "" : i.ORD_WGT.ToString());
-                columns.Add(i.BASE_PRICE == null ? "" : i.BASE_PRICE.ToString());
-                columns.Add(i.EFFECT_PRICE == null ? "" : i.EFFECT_PRICE.ToString());
-                columns.Add(i.BIDD_PRICE == null ? "" : i.BIDD_PRICE.ToString());
+                columns.Add(i.BASE_PRICE == null ? "" : Math.Round(Convert.ToDouble(i.BASE_PRICE), 2, MidpointRounding.ToEven).ToString());
+                columns.Add(i.EFFECT_PRICE == null ? "" : Math.Round(Convert.ToDouble(i.EFFECT_PRICE), 2, MidpointRounding.ToEven).ToString());
+                columns.Add(i.BIDD_PRICE == null ? "" : Math.Round(Convert.ToDouble(i.BIDD_PRICE), 2, MidpointRounding.ToEven).ToString());
                 columns.Add(i.CONTRACT_NO == null ? "" : i.CONTRACT_NO.ToString());
                 columns.Add(i.ORD_USAGE);
                 columns.Add(i.ORD_STAT);
@@ -86,9 +86,9 @@ namespace VstCustomer.Controllers
             if (ACTION == 1)
             {
                 //Update(string EMP_ID, string CLAIM_NO, DateTime CLAIM_DATE, string CUSTOMER_ID, string COIL_NO, decimal CLAIM_WGT, decimal NET_WGT, DateTime VISIT_DATE, string DEFECT_CD, string DEFECT_LINE, DateTime FINISH_DATE, decimal COMPENT, string REMARK, string STATUS, decimal COIL_THK, decimal COIL_WTH, string STS_ST_CLS, string SURFACE_CD, string GRADE)
-                result = order.Update(order.ID,order.EMP_ID, order.ORDED_DATE, order.CUSTOMER_ID, order.ORDER_CR_HR, order.STS_ST_CLS, order.STS_ST_SER, order.SURFACE_CD,
+                result = order.Update(order.ID, order.EMP_ID, order.ORDED_DATE, order.CUSTOMER_ID, order.ORDER_CR_HR, order.STS_ST_CLS, order.STS_ST_SER, order.SURFACE_CD,
                     order.ORD_THK, order.ORD_WTH, order.ORD_EDGE, order.ORD_WGT, order.BASE_PRICE, order.EFFECT_PRICE, order.BIDD_PRICE,
-                    order.CONTRACT_NO, order.ORD_USAGE, order.ORD_STAT, order.END_USER, order.QUANTITY,order.DELIVERY_TIME,order.REMARK);
+                    order.CONTRACT_NO, order.ORD_USAGE, order.ORD_STAT, order.END_USER, order.QUANTITY, order.DELIVERY_TIME, order.REMARK);
 
             }
             else
@@ -106,17 +106,17 @@ namespace VstCustomer.Controllers
         public JsonResult GetOrderById(string ID)
         {
             ORDERED order = new ORDERED();
-           
+
             List<ORDERED> lst = order.Select(ID);
             return Json(lst);
         }
 
-      
+
         [HttpPost]
         public JsonResult GetEndUserById(string ID)
         {
             CUSTOMER cus = new CUSTOMER();
-         
+
             END_USER end = cus.GetEndUserById(ID);
             if (end == null)
             {
@@ -126,8 +126,8 @@ namespace VstCustomer.Controllers
                 end.NAME = cus.NAME;
                 end.END_USER_ID = ID;
             }
-            
-          
+
+
             return Json(end);
         }
 
@@ -135,7 +135,7 @@ namespace VstCustomer.Controllers
         public JsonResult GetEndUser(string CUS_ID)
         {
             CUSTOMER cus = new CUSTOMER();
-          
+
             List<END_USER> end = cus.GetEndUser(CUS_ID);
             cus = cus.Select(CUS_ID).FirstOrDefault();
             if (end == null || end.Count == 0)
@@ -145,9 +145,9 @@ namespace VstCustomer.Controllers
                 endUser.CUS_ID = CUS_ID;
                 endUser.NAME = cus.NAME;
                 end.Add(endUser);
-               
+
             }
-            var result =new { CUSTOMER=cus, END=end };
+            var result = new { CUSTOMER = cus, END = end };
             return Json(result);
         }
 
@@ -160,7 +160,7 @@ namespace VstCustomer.Controllers
         }
 
 
-        public ActionResult Export(string month = "", string cus_id = "", string status = "")
+        public ActionResult Export(string month, string cus_id, string status)
         {
             ORDERED order = new ORDERED();
             var fileName = DateTime.Now.ToString("yyyyMMddHHmmss");
@@ -210,7 +210,7 @@ namespace VstCustomer.Controllers
                 r["Thk"] = item.ORD_THK;
                 r["Wth"] = item.ORD_WTH;
                 r["ed"] = item.ORD_EDGE;
-                r["Qty"] =Convert.ToInt32( item.QUANTITY);
+                r["Qty"] = Convert.ToInt32(item.QUANTITY);
                 //r["WGT"] = item.ORD_WGT;
                 r["BASE_PRICE"] = item.BASE_PRICE;
                 r["EFF_PRICE"] = item.EFFECT_PRICE;

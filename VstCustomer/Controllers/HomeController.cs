@@ -84,7 +84,7 @@ namespace VstCustomer.Controllers
             {
                 var columns = new List<string>();
                 var tar = i.tar == null ? 0 : i.tar;
-                var Ratio = tar == 0 ? 0 :  ((Convert.ToDouble(i.result) / i.tar) * 100).ToString();
+                var Ratio = tar == 0 ? 0 : Math.Round(Convert.ToDouble(i.result) / i.tar * 100, 2, MidpointRounding.ToEven).ToString();
                 columns.Add("<a href='#' class='emp' data-emid='" + i.EMP_ID + "'>"+i.EMP_ID+"</a>");
                 columns.Add(i.EMP_NAME.Trim());
                 columns.Add(tar.ToString());

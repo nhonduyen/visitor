@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Data;
 
 namespace VstCustomer
 {
@@ -189,6 +190,43 @@ AND (@CUSTOMER_ID='' OR CUSTOMER_ID=@CUSTOMER_ID) AND (@EMP_ID='' OR EMP_ID=@EMP
                 id += num.ToString();
             }
             return id;
+        }
+        public DataTable Export(string from, string to, string cus_id, string em_id)
+        {
+            var sql = string.Format(@"SELECT v.*,e.EMP_NAME,cus.NAME as CUS_NAME  
+   from VIST_CONTACTOR as v inner join customer as cus on v.CUSTOMER_ID=cus.ID  left join employee as e on e.EMP_ID=v.EMP_ID WHERE (@FROM='' OR CONTACT_DATE BETWEEN @FROM AND @TO)
+AND (@CUSTOMER_ID='' OR CUSTOMER_ID=@CUSTOMER_ID) AND (@EMP_ID='' OR e.EMP_ID=@EMP_ID)");
+            DataTable dtb = new DataTable();
+            var result = DBManager<VIST_CONTACTOR>.ExecuteDynamic(sql, new
+            {
+                FROM = from,
+                TO = to,
+                EMP_ID = em_id,
+                CUSTOMER_ID = cus_id
+            });
+            dtb.Clear();
+
+            dtb.Columns.Add("DATE");
+            dtb.Columns.Add("CUSTOMER_ID");
+            dtb.Columns.Add("CUS_NAME");
+            dtb.Columns.Add("VISIT_TYPE");
+            dtb.Columns.Add("PURPOSE");
+            dtb.Columns.Add("CONTENT");
+            dtb.Columns.Add("EMPLOYEE");
+            foreach (var item in result)
+            {
+                DataRow r = dtb.NewRow();
+                r["DATE"] = item.CONTACT_DATE == null ? "" : item.CONTACT_DATE.ToString("yyyy-MM-dd");
+                r["CUSTOMER_ID"] = item.CUSTOMER_ID;
+                r["CUS_NAME"] = item.CUS_NAME;
+                r["VISIT_TYPE"] = item.CUST_VIST_TYPE;
+                r["PURPOSE"] = item.CUST_VIST_PURPOSE;
+                r["CONTENT"] = item.VIST_REMARK;
+                r["EMPLOYEE"] = item.EMP_NAME;
+               
+                dtb.Rows.Add(r);
+            }
+            return dtb;
         }
     }
 

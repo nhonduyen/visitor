@@ -306,4 +306,13 @@
         tbClaim.draw();
         return false;
     });
+    $('#btnExport').click(function () {
+        var from = $('#from').val();
+        var to = $('#to').val();
+        var cus_id = $('#selCus').val();
+        var emp = $('#selEmp').val();
+        var url = $('#hdUrl').val().replace("Action", "Export") + "?from=" + from + "&to="+to+"&cus_id=" + cus_id + "&emp=" + emp;
+        window.location.href = url;
+        return false;
+    });
 });
