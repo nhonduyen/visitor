@@ -79,7 +79,7 @@ WHERE (@month='' OR CLAIM_DATE LIKE @month+'%')
             });
         }
 
-        public dynamic GetExport(string month = "", string cust_id = "", string status = "")
+        public dynamic GetExport(string month, string cust_id, string status)
         {
 
             var sql = string.Format(@"SELECT 

@@ -65,7 +65,7 @@ namespace VstCustomer.Controllers
         public ActionResult Logout()
         {
             Session.Abandon();
-            return RedirectToAction("Login","Home");
+            return RedirectToAction("Login", "Home");
         }
 
         [HttpPost]
@@ -85,7 +85,7 @@ namespace VstCustomer.Controllers
                 var columns = new List<string>();
                 var tar = i.tar == null ? 0 : i.tar;
                 var Ratio = tar == 0 ? 0 : Math.Round(Convert.ToDouble(i.result) / i.tar * 100, 2, MidpointRounding.ToEven).ToString();
-                columns.Add("<a href='#' class='emp' data-emid='" + i.EMP_ID + "'>"+i.EMP_ID+"</a>");
+                columns.Add("<a href='#' class='emp' data-emid='" + i.EMP_ID + "'>" + i.EMP_ID + "</a>");
                 columns.Add(i.EMP_NAME.Trim());
                 columns.Add(tar.ToString());
                 columns.Add(i.result.ToString());
@@ -93,7 +93,7 @@ namespace VstCustomer.Controllers
                 columns.Add(i.ca.ToString());
                 columns.Add(i.email.ToString());
                 columns.Add(Ratio.ToString());
-                columns.Add(i.EMP_DEPT==null ? "" : i.EMP_DEPT.Trim());
+                columns.Add(i.EMP_DEPT == null ? "" : i.EMP_DEPT.Trim());
                 resultSet.data.Add(columns);
 
             }
@@ -121,12 +121,12 @@ namespace VstCustomer.Controllers
                     }
                 }
             }
-          
+
             return Json(result);
         }
 
         [HttpPost]
-        public JsonResult InsertUpdateVisit( VIST_CONTACTOR VISIT, int ROLE)
+        public JsonResult InsertUpdateVisit(VIST_CONTACTOR VISIT, int ROLE)
         {
 
             var result = 0;
@@ -141,7 +141,7 @@ namespace VstCustomer.Controllers
                 }
                 else
                 {
-                    result = VISIT.Update(VISIT.EMP_ID, VISIT.CUSTOMER_ID, VISIT.CUST_CONTACTOR, VISIT.CONTACT_DATE, VISIT.CUST_VIST_TYPE, VISIT.CUST_VIST_PURPOSE, VISIT.VIST_REMARK,VISIT.ID);
+                    result = VISIT.Update(VISIT.EMP_ID, VISIT.CUSTOMER_ID, VISIT.CUST_CONTACTOR, VISIT.CONTACT_DATE, VISIT.CUST_VIST_TYPE, VISIT.CUST_VIST_PURPOSE, VISIT.VIST_REMARK, VISIT.ID);
                 }
             }
             return Json(result);
@@ -170,7 +170,7 @@ namespace VstCustomer.Controllers
             CONTACT vc = new CONTACT();
             var lst = vc.SelectCusContact(CUS_ID);
             cus = cus.Select(CUS_ID).FirstOrDefault();
-            var result = new { CONTACTS= lst, CUSTOMER=cus };
+            var result = new { CONTACTS = lst, CUSTOMER = cus };
             return Json(result);
         }
 
@@ -186,7 +186,7 @@ namespace VstCustomer.Controllers
         {
             VIST_CONTACTOR vit = new VIST_CONTACTOR();
             EMPLOYEE em = new EMPLOYEE();
-            var lst = vit.SelectPaging(month, 0,1000);
+            var lst = vit.SelectPaging(month, 0, 1000);
 
             DataTable dtb = new DataTable();
 
@@ -205,7 +205,7 @@ namespace VstCustomer.Controllers
 
             foreach (var i in lst)
             {
-                DataRow r=dtb.NewRow();
+                DataRow r = dtb.NewRow();
                 var columns = new List<string>();
                 var tar = i.tar == null ? 0 : i.tar;
                 var Ratio = tar == 0 ? 0 : (Convert.ToDouble(i.result) / i.tar) * 100;

@@ -17,13 +17,7 @@
     <title>VST CUSTOMER MANAGEMENT</title>
 
     <!-- Bootstrap core CSS -->
-
-    <link rel="stylesheet" href="@Url.Content("~/Content/bt/bootstrap.min.css")" />
-    <link rel="stylesheet" href="@Url.Content("~/Content/bt/datepicker.css")" />
-    <link rel="stylesheet" href="@Url.Content("~/Content/site.css")" />
-    <!-- DataTables CSS -->
-    <link href="@Url.Content("~/Content/bt/dataTables.bootstrap.css")" rel="stylesheet">
-    <link href="@Url.Content("~/Content/bt/selectize.bootstrap3.css")" rel="stylesheet">
+    @Styles.Render("~/Content/bundle")
 </head>
 
 <body>
@@ -115,26 +109,8 @@
             <span>Copyright &copy; 2018 - POSCO VST</span>
         </div>
     </footer>
-    <script src="@Url.Content("~/Scripts/Include/modernizr-3.5.0.min.js")"></script>
-    <script src="@Url.Content("~/Scripts/Include/plugins.js")"></script>
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="@Url.Content("~/Scripts/Include/jquery-1.11.3.min.js")"></script>
-    <script src="@Url.Content("~/Scripts/Include/bootstrap.min.js")"></script>
-    <script src="@Url.Content("~/Scripts/Include/bootstrap-datepicker.js")"></script>
-
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="@Url.Content("~/Scripts/Include/ie10-viewport-bug-workaround.js")"></script>
-    <!-- DataTables JavaScript -->
-    <script src="@Url.Content("~/Scripts/Include/jquery.dataTables.min.js")"></script>
-    <script src="@Url.Content("~/Scripts/Include/dataTables.bootstrap.js")"></script>
-    <script src="@Url.Content("~/Scripts/Include/bootbox.min.js")"></script>
-    <script src="@Url.Content("~/Scripts/Include/moment.min.js")"></script>
-    <script src="@Url.Content("~/Scripts/Include/smoke.js")"></script>
-    <script src="@Url.Content("~/Scripts/Include/jquery.ui.widget.js")"></script>
-    <script src="@Url.Content("~/Scripts/Include/jquery.iframe-transport.js")"></script>
-    <script src="@Url.Content("~/Scripts/Include/jquery.fileupload.js")"></script>
+     @Scripts.Render("~/Scripts/bundle")
+   
     @RenderSection("Scripts", false)
 </body>
 

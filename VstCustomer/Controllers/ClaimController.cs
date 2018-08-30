@@ -40,15 +40,15 @@ namespace VstCustomer.Controllers
             var resultSet = new DataTableResultSet();
             resultSet.draw = dataTableParameters.Draw;
             var lst = cl.SelectPaging(dataTableParameters.Start + 1,
-                dataTableParameters.Start + dataTableParameters.Length + 1, month, cust_id, status);
+                dataTableParameters.Start + dataTableParameters.Length + 1, month,  cust_id,  status);
             resultSet.recordsTotal = resultSet.recordsFiltered = cl.GetCount(month, cust_id, status);
             CUSTOMER cus = new CUSTOMER();
             foreach (var i in lst)
             {
                 END_USER end = cus.GetEndUserById(i.END_USER);
                 var columns = new List<string>();
-                columns.Add("<input type='checkbox' class='ckb' id='" + i.CLAIM_NO + "' data-cus='" + i.CUSTOMER_ID + "' data-emp='" + i.EMP_ID.Trim() + "' />");
-                columns.Add(i.CLAIM_DATE == null ? "" : i.CLAIM_DATE.ToShortDateString());
+                columns.Add("<input type='checkbox' class='ckb' id='" + i.CLAIM_NO + "' data-cus='" + i.CUSTOMER_ID + "' data-emp='"+i.EMP_ID.Trim()+"' />");
+                columns.Add(i.CLAIM_DATE == null? "" : i.CLAIM_DATE.ToShortDateString());
                 columns.Add(i.NAME);
                 columns.Add(end == null ? i.NAME : end.NAME);
                 columns.Add(i.LOC);
@@ -79,20 +79,20 @@ namespace VstCustomer.Controllers
             if (ACTION == 1)
             {
                 //Update(string EMP_ID, string CLAIM_NO, DateTime CLAIM_DATE, string CUSTOMER_ID, string COIL_NO, decimal CLAIM_WGT, decimal NET_WGT, DateTime VISIT_DATE, string DEFECT_CD, string DEFECT_LINE, DateTime FINISH_DATE, decimal COMPENT, string REMARK, string STATUS, decimal COIL_THK, decimal COIL_WTH, string STS_ST_CLS, string SURFACE_CD, string GRADE)
-                result = claim.Update(claim.EMP_ID, claim.CLAIM_NO, claim.CLAIM_DATE, claim.CUSTOMER_ID, claim.COIL_NO,
-                    claim.CLAIM_WGT, claim.NET_WGT, claim.VISIT_DATE, claim.DEFECT_CD, claim.DEFECT_LINE, claim.FINISH_DATE,
+                result = claim.Update(claim.EMP_ID,claim.CLAIM_NO, claim.CLAIM_DATE,claim.CUSTOMER_ID,claim.COIL_NO,
+                    claim.CLAIM_WGT,claim.NET_WGT,claim.VISIT_DATE,claim.DEFECT_CD,claim.DEFECT_LINE,claim.FINISH_DATE,
                     claim.COMPENT, claim.REMARK, claim.STATUS, claim.COIL_THK, claim.COIL_WTH, claim.STS_ST_CLS, claim.SURFACE_CD, claim.GRADE,
-                    claim.DEFFECT_KIND, claim.END_USER, claim.SPEC, claim.TYPE, claim.ATTACHMENT);
-
+                    claim.DEFFECT_KIND,claim.END_USER,claim.SPEC,claim.TYPE,claim.ATTACHMENT);
+               
             }
             else
             {
-
+                
                 //Insert(string EMP_ID, string CLAIM_NO, DateTime CLAIM_DATE, string CUSTOMER_ID, string COIL_NO, decimal CLAIM_WGT, decimal NET_WGT, DateTime VISIT_DATE, string DEFECT_CD, string DEFECT_LINE, DateTime FINISH_DATE, decimal COMPENT, string REMARK, string STATUS, decimal COIL_THK, decimal COIL_WTH, string STS_ST_CLS, string SURFACE_CD, string GRADE)
                 result = claim.Insert(claim.EMP_ID, claim.CLAIM_NO, claim.CLAIM_DATE, claim.CUSTOMER_ID, claim.COIL_NO,
                      claim.CLAIM_WGT, claim.NET_WGT, claim.VISIT_DATE, claim.DEFECT_CD, claim.DEFECT_LINE, claim.FINISH_DATE,
                      claim.COMPENT, claim.REMARK, claim.STATUS, claim.COIL_THK, claim.COIL_WTH, claim.STS_ST_CLS, claim.SURFACE_CD, claim.GRADE,
-                     claim.DEFFECT_KIND, claim.END_USER, claim.SPEC, claim.TYPE, claim.ATTACHMENT);
+                     claim.DEFFECT_KIND,claim.END_USER,claim.SPEC,claim.TYPE,claim.ATTACHMENT);
             }
             return Json(result);
         }
@@ -125,8 +125,8 @@ namespace VstCustomer.Controllers
             cus = cus.Select(CUS_ID).FirstOrDefault();
             em = em.Select(EMP_ID).FirstOrDefault();
             lst.Add(em.EMP_NAME);
-            lst.Add(cus == null ? "" : cus.NAME);
-
+            lst.Add(cus==null ? "" : cus.NAME);
+          
             return Json(lst);
         }
 
@@ -196,7 +196,7 @@ namespace VstCustomer.Controllers
                 DataRow r = dtb.NewRow();
                 r["CLAIM_DATE"] = item.CLAIM_DATE == null ? "" : item.CLAIM_DATE.ToString("yyyy-MM-dd");
                 r["CUS_NAME"] = item.NAME;
-                r["END_USER_NAME"] = end == null ? item.NAME : end.NAME;
+                r["END_USER_NAME"] = end==null ?  item.NAME : end.NAME;
                 r["LOC"] = item.LOC;
                 r["COIL_NO"] = item.COIL_NO;
                 r["SPEC"] = item.SPEC;
@@ -209,7 +209,7 @@ namespace VstCustomer.Controllers
                 r["REMARK"] = item.REMARK;
                 r["DEFFECT_KIND"] = item.DEFFECT_KIND;
                 r["EMP_NAME"] = item.EMP_NAME;
-
+               
                 dtb.Rows.Add(r);
             }
             // Gọi lại hàm để tạo file excel
