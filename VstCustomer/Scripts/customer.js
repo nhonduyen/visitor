@@ -261,78 +261,74 @@
     });
     $('#frmRegCus').submit(function (e) {
         e.preventDefault();
-        if ($('#frmRegCus').smkValidate()) {
-            var id = $.trim($('#txtCusId').val());
-            var action = $('#frmRegCus').attr('data-id').length > 0 ? 1 : 0;
-            var customer = {
-                ID: $.trim($('#txtCusId').val()),
-                NAME: $.trim($('#txtCusName').val()),
-                CLASS: $.trim($('#selClass').val()),
-                ADDRESS: $.trim($('#txtAddress').val()),
-                TEL: $.trim($('#txtTel').val()),
-                LOCATION: $.trim($('#txtLoc').val()),
-                FAX: $.trim($('#txtFax').val()),
-                ESTABLE: $.trim($('#txtEs').val()),
-                CONTACT: $.trim($('#txtContact').val()),
-                APPLICATION: $.trim($('#txtApp').val()),
-                SPEC: $.trim($('#txtDesc').val()),
-                TYPE: $.trim($('#selGroup').val())
+        var id = $.trim($('#txtCusId').val());
+        var action = $('#frmRegCus').attr('data-id').length > 0 ? 1 : 0;
+        var customer = {
+            ID: $.trim($('#txtCusId').val()),
+            NAME: $.trim($('#txtCusName').val()),
+            CLASS: $.trim($('#selClass').val()),
+            ADDRESS: $.trim($('#txtAddress').val()),
+            TEL: $.trim($('#txtTel').val()),
+            LOCATION: $.trim($('#txtLoc').val()),
+            FAX: $.trim($('#txtFax').val()),
+            ESTABLE: $.trim($('#txtEs').val()),
+            CONTACT: $.trim($('#txtContact').val()),
+            APPLICATION: $.trim($('#txtApp').val()),
+            SPEC: $.trim($('#txtDesc').val()),
+            TYPE: $.trim($('#selGroup').val())
+        };
+        var contacts = [];
+        if ($('#txtPerson').val()) {
+            var contact1 = {
+                ID: '',
+                CUSTOMER_ID: id,
+                NAME: $('#txtPerson').val(),
+                DOB: $('#txtBirthday').val(),
+                POSITION: $('#txtPos').val(),
+                EMAIL: $('#txtEmail').val(),
+                MOBILE: $('#txtMobile').val(),
+                SEX: $('#selSex').val()
             };
-            var contacts = [];
-            if ($('#txtPerson').val()) {
-                var contact1 = {
-                    ID: '',
-                    CUSTOMER_ID: id,
-                    NAME: $('#txtPerson').val(),
-                    DOB: $('#txtBirthday').val(),
-                    POSITION: $('#txtPos').val(),
-                    EMAIL: $('#txtEmail').val(),
-                    MOBILE: $('#txtMobile').val(),
-                    SEX: $('#selSex').val()
-                };
-                contacts.push(contact1);
-            }
-            $.each($(".contact"), function () {
-                var contact = {
-                    ID: $(this).attr('data-id'),
-                    CUSTOMER_ID: id,
-                    NAME: $(this).find('.person').val(),
-                    DOB: $(this).find('.dob').val(),
-                    POSITION: $(this).find('.pos').val(),
-                    EMAIL: $(this).find('.email').val(),
-                    MOBILE: $(this).find('.mobile').val(),
-                    SEX: $(this).find('.sex').val()
-                };
-                contacts.push(contact);
+            contacts.push(contact1);
+        }
+        $.each($(".contact"), function () {
+            var contact = {
+                ID: $(this).attr('data-id'),
+                CUSTOMER_ID: id,
+                NAME: $(this).find('.person').val(),
+                DOB: $(this).find('.dob').val(),
+                POSITION: $(this).find('.pos').val(),
+                EMAIL: $(this).find('.email').val(),
+                MOBILE: $(this).find('.mobile').val(),
+                SEX: $(this).find('.sex').val()
+            };
+            contacts.push(contact);
+        });
+        if (customer.ID) {
+            $.ajax({
+                url: $('#hdUrl').val().replace("Action", "InsertUpdateCustomer"),
+                data: JSON.stringify({
+                    CUS: customer,
+                    CONTACTS: contacts,
+                    ACTION: action
+                }),
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                crossBrowser: true,
+                success: function (data, status) {
+                    bootbox.alert(status);
+                    tbCustomer.ajax.reload();
+                    $('#mdRegCus').modal('hide');
+                    $('.contact').remove();
+                    return false;
+                },
+                error: function (xhr, status, error) {
+                    bootbox.alert("Error! " + xhr.status);
+                },
             });
-            if (customer.ID) {
-                $.ajax({
-                    url: $('#hdUrl').val().replace("Action", "InsertUpdateCustomer"),
-                    data: JSON.stringify({
-                        CUS: customer,
-                        CONTACTS: contacts,
-                        ACTION: action
-                    }),
-                    type: 'POST',
-                    dataType: 'json',
-                    contentType: 'application/json; charset=utf-8',
-                    crossBrowser: true,
-                    success: function (data, status) {
-                        bootbox.alert(status);
-                        tbCustomer.ajax.reload();
-                        $('#mdRegCus').modal('hide');
-                        $('.contact').remove();
-                        return false;
-                    },
-                    error: function (xhr, status, error) {
-                        bootbox.alert("Error! " + xhr.status);
-                    },
-                });
-            }
         }
-        else {
-            bootbox.alert('Invalid field');
-        }
+
 
         return false;
     });

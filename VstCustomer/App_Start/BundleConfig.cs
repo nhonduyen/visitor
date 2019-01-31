@@ -12,7 +12,7 @@ namespace VstCustomer.App_Start
         {
 
             bundles.Add(new StyleBundle("~/Content/bundle")
-                .Include("~/Content/bt/bootstrap.min.css", new CssRewriteUrlTransform()) // rewrite relative url to absolute url (show glyphicon)
+                .Include("~/Content/bt/bootstrap.css", new CssRewriteUrlTransform()) // rewrite relative url to absolute url (show glyphicon)
                 .Include(
                 "~/Content/bt/dataTables.bootstrap.css",
                 "~/Content/bt/datepicker.css",

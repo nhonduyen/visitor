@@ -92,8 +92,7 @@ namespace VstCustomer.Controllers
         public JsonResult Delete(string ID)
         {
             EMPLOYEE emp = new EMPLOYEE();
-            EMP_CUST ec = new EMP_CUST();
-            ec.Delete(ID);
+          
             var result = emp.Delete(ID);
             return Json(result);
         }

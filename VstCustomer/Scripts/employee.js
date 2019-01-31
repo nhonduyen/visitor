@@ -30,7 +30,7 @@
     $('#btnReset').click(function () {
         if ($("input:checkbox:checked").length > 0) {
             var id = $("#tbMainDefault tr").find("input[type='checkbox']:checked").attr('id');
-           
+
             if (id) {
                 $.ajax({
                     url: $('#hdUrl').val().replace("Action", "ResetPassword"),
@@ -69,7 +69,7 @@
                 cus.push($(this).attr('data-id'));
             }
         });
-       
+
         var cfm = confirm('Are you sure you want to remove these customers?');
         if (cfm) {
             $.ajax({
@@ -205,7 +205,7 @@
             $("#tbCus tbody").empty();
             if (id) {
                 GetCusByEmpId(id);
-               
+
                 $.ajax({
                     url: $('#hdUrl').val().replace("Action", "GetEmployeeById"),
                     data: JSON.stringify({
@@ -223,7 +223,7 @@
                             $('#txtEmail').val($.trim(data[0].EMP_EMAIL));
                             $('#txtMobile').val($.trim(data[0].EMP_MOBILE));
                             $('#selRole').val($.trim(data[0].ROLE));
-                          
+
                         }
                     },
                     error: function (xhr, status, error) {
@@ -243,46 +243,40 @@
     });
     $('#frmRegEmp').submit(function (e) {
         e.preventDefault();
-        if ($('#frmRegEmp').smkValidate()) {
-            var id = $.trim($('#txtEmpId').val());
-            var action = $('#frmRegEmp').attr('data-action');
-            var emp = {
-                EMP_ID: id,
-                EMP_NAME: $.trim($('#txtEmpName').val()),
-                EMP_DEPT: $.trim($('#selDept').val()),
-                EMP_EMAIL: $.trim($('#txtEmail').val()),
-                EMP_MOBILE: $.trim($('#txtMobile').val()),
-                ROLE: $.trim($('#selRole').val())
-              
-            };
-           
-            if (emp.EMP_ID) {
-                $.ajax({
-                    url: $('#hdUrl').val().replace("Action", "InsertUpdateEmployee"),
-                    data: JSON.stringify({
-                        EMP: emp,
-                        ACTION: action
-                    }),
-                    type: 'POST',
-                    dataType: 'json',
-                    contentType: 'application/json; charset=utf-8',
-                    crossBrowser: true,
-                    success: function (data, status) {
-                        bootbox.alert(status);
-                        tbEmp.ajax.reload();
-                        $('#mdRegCus').modal('hide');
-                        return false;
-                    },
-                    error: function (xhr, status, error) {
-                        bootbox.alert("Error! " + xhr.status);
-                    },
-                });
-            }
-        }
-        else {
-            bootbox.alert('Invalid field');
-        }
+        var id = $.trim($('#txtEmpId').val());
+        var action = $('#frmRegEmp').attr('data-action');
+        var emp = {
+            EMP_ID: id,
+            EMP_NAME: $.trim($('#txtEmpName').val()),
+            EMP_DEPT: $.trim($('#selDept').val()),
+            EMP_EMAIL: $.trim($('#txtEmail').val()),
+            EMP_MOBILE: $.trim($('#txtMobile').val()),
+            ROLE: $.trim($('#selRole').val())
 
+        };
+
+        if (emp.EMP_ID) {
+            $.ajax({
+                url: $('#hdUrl').val().replace("Action", "InsertUpdateEmployee"),
+                data: JSON.stringify({
+                    EMP: emp,
+                    ACTION: action
+                }),
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                crossBrowser: true,
+                success: function (data, status) {
+                    bootbox.alert(status);
+                    tbEmp.ajax.reload();
+                    $('#mdRegCus').modal('hide');
+                    return false;
+                },
+                error: function (xhr, status, error) {
+                    bootbox.alert("Error! " + xhr.status);
+                },
+            });
+        }
         return false;
     });
     $('#tbEmp').on('click', '.btnRemove', function () {
@@ -347,7 +341,7 @@
             success: function (data, status) {
                 if (data.length > 0) {
                     for (var i = 0; i < data.length; i++) {
-                        $("#tbCus tbody").append('<tr><td><input type="checkbox" class="ck" data-id="'+data[i].ID+'" /></td><td class="cus">' + data[i].ID + '</td><td>' + data[i].NAME + '</td><td>' + data[i].CLASS + '</td></tr>');
+                        $("#tbCus tbody").append('<tr><td><input type="checkbox" class="ck" data-id="' + data[i].ID + '" /></td><td class="cus">' + data[i].ID + '</td><td>' + data[i].NAME + '</td><td>' + data[i].CLASS + '</td></tr>');
 
                     }
                 }

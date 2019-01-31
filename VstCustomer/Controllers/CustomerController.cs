@@ -54,15 +54,18 @@ namespace VstCustomer.Controllers
             {
                 result = cus.Update(CUS.ID, CUS.NAME, CUS.ADDRESS, CUS.LOCATION, CUS.TEL, CUS.FAX, CUS.ESTABLE, CUS.CONTACT,
                    CUS.CLASS, CUS.APPLICATION, CUS.PERSON, CUS.SPEC, CUS.TYPE);
-                foreach (var contact in CONTACTS)
+                if (CONTACTS != null)
                 {
-                    if (string.IsNullOrWhiteSpace(contact.ID))
+                    foreach (var contact in CONTACTS)
                     {
-                        con.Insert(CUS.ID, contact.NAME, contact.DOB, contact.POSITION, contact.MOBILE, contact.EMAIL, contact.SEX);
-                    }
-                    else
-                    {
-                        con.Update(contact.ID, contact.NAME, contact.DOB, contact.POSITION, contact.MOBILE, contact.EMAIL, contact.SEX);
+                        if (string.IsNullOrWhiteSpace(contact.ID))
+                        {
+                            con.Insert(CUS.ID, contact.NAME, contact.DOB, contact.POSITION, contact.MOBILE, contact.EMAIL, contact.SEX);
+                        }
+                        else
+                        {
+                            con.Update(contact.ID, contact.NAME, contact.DOB, contact.POSITION, contact.MOBILE, contact.EMAIL, contact.SEX);
+                        }
                     }
                 }
             }
@@ -73,9 +76,12 @@ namespace VstCustomer.Controllers
                     return Json(-1);
                 result = cus.Insert(CUS.ID, CUS.NAME, CUS.ADDRESS, CUS.LOCATION, CUS.TEL, CUS.FAX, CUS.ESTABLE, CUS.CONTACT,
                     CUS.CLASS, CUS.APPLICATION, CUS.PERSON, CUS.SPEC, CUS.TYPE);
-                foreach (var contact in CONTACTS)
+                if (CONTACTS != null)
                 {
-                    con.Insert(CUS.ID, contact.NAME, contact.DOB, contact.POSITION, contact.MOBILE, contact.EMAIL, contact.SEX);
+                    foreach (var contact in CONTACTS)
+                    {
+                        con.Insert(CUS.ID, contact.NAME, contact.DOB, contact.POSITION, contact.MOBILE, contact.EMAIL, contact.SEX);
+                    }
                 }
             }
             return Json(result);

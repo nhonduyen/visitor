@@ -1,7 +1,13 @@
 ﻿
 $(document).ready(function () {
     $('#loder').addClass('active');
-    $('#month,#txtDelivery')
+    $('#from,#to')
+    .datepicker({
+        format: 'yyyy-mm-dd'
+    }).on('changeDate', function (ev) {
+        $(this).datepicker('hide');
+    });
+    $('#txtDelivery')
      .datepicker({
          format: 'yyyy-mm',
          viewMode: 'months'
@@ -59,7 +65,8 @@ $(document).ready(function () {
 
                      return JSON.stringify({
                          dataTableParameters: d,
-                         month: $('#month').val(),
+                         from: $('#from').val(),
+                         to: $('#to').val(),
                          cust_id: $('#selCus').val(),
                          status: $('#selStatus').val(),
                      });
@@ -376,10 +383,20 @@ $(document).ready(function () {
     });
     
     $('#btnExport').click(function () {
-        var month = $('#month').val();
+        var from = $('#from').val();
+        var to = $('#to').val();
         var cus_id = $('#selCus').val();
         var status = $('#selStatus').val();
-        var url = $('#hdUrl').val().replace("Action", "Export") + "?month=" + month + "&cus_id=" + cus_id + "&status=" + status;
+        var url = $('#hdUrl').val().replace("Action", "Export") + "?from=" + from + "&to="+to+"&cus_id=" + cus_id + "&status=" + status;
+        window.location.href = url;
+        return false;
+    });
+    $('#btnExportReport').click(function () {
+        var from = $('#from').val();
+        var to = $('#to').val();
+        var cus_id = $('#selCus').val();
+        var status = $('#selStatus').val();
+        var url = $('#hdUrl').val().replace("Action", "ExportReport") + "?from=" + from + "&to=" + to + "&cus_id=" + cus_id + "&status=" + status;
         window.location.href = url;
         return false;
     });

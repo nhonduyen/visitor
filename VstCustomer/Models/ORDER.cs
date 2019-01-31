@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Data;
 
 namespace VstCustomer
 {
@@ -29,6 +30,7 @@ namespace VstCustomer
         public int QUANTITY { get; set; }
         public string DELIVERY_TIME { get; set; }
         public string REMARK { get; set; }
+        public DateTime CREATE_AT { get; set; }
 
         public ORDERED() { }
 
@@ -41,13 +43,17 @@ namespace VstCustomer
             return DBManager<ORDERED>.ExecuteReader(sql, new { ID = ID });
         }
 
-        public virtual dynamic SelectPaging(int start = 0, int end = 10, string month = "", string cust_id = "", string status = "")
+        public virtual dynamic SelectPaging(int start = 0, int end = 10, string from = "", string to="", string cust_id = "", string status = "")
         {
+            if (string.IsNullOrEmpty(from) || string.IsNullOrEmpty(to))
+            {
+                from = to = DateTime.Now.ToString("yyyy-MM-dd");
+            }
             var sql = string.Format(@"SELECT * FROM(SELECT ROW_NUMBER() OVER (order by ORDED_DATE) AS ROWNUM, O.*,CUS.NAME,E.EMP_NAME,
 (SELECT TOP 1 NAME FROM END_USER WHERE CUS_ID=O.END_USER) as END_USER_NAME
 FROM ORDERED AS O
 INNER JOIN CUSTOMER AS CUS ON O.CUSTOMER_ID=CUS.ID INNER JOIN EMPLOYEE AS E ON E.EMP_ID=O.EMP_ID
-WHERE (@month='' OR ORDED_DATE LIKE @month+'%')
+WHERE (@from ='' OR ORDED_DATE BETWEEN @from AND @to)
             AND (@cust_id='' OR CUSTOMER_ID=@cust_id) AND(@status='' OR ORD_STAT=@status)
 ) as u  WHERE   RowNum >= @start   AND RowNum < @end ORDER BY RowNum;");
 
@@ -55,38 +61,63 @@ WHERE (@month='' OR ORDED_DATE LIKE @month+'%')
             {
                 start = start,
                 end = end,
-                month = month,
+                from = from,
+                to=to,
                 cust_id = cust_id,
                 status = status
             });
         }
-        public  dynamic GetExport( string month = "", string cust_id = "", string status = "")
+
+        public List<OrderResult> GetSumExport(string from = "", string to = "", string cust_id = "", string status = "")
+        {
+            var sql = string.Format(@"
+SELECT CUSTOMER_ID, NAME, QUANTITY,STS_ST_CLS,STS_ST_SER,SURFACE_CD,BASE_PRICE,EFFECT_PRICE,BIDD_PRICE,
+ORD_USAGE,ORD_STAT, E.EMP_DEPT, ORDED_DATE
+FROM ORDERED AS O
+INNER JOIN EMPLOYEE AS E
+ON E.EMP_ID=O.EMP_ID AND E.EMP_DEPT IN ('Sales Team','Solution Sales','Solution Improvement')
+INNER JOIN CUSTOMER AS C ON C.ID=O.CUSTOMER_ID
+WHERE STS_ST_CLS IS NOT NULL
+AND ORD_USAGE IS NOT NULL AND ORD_USAGE <> ''
+AND ORDED_DATE BETWEEN @from AND @to AND (@cust_id='' OR CUSTOMER_ID=@cust_id) AND(@status='' OR ORD_STAT=@status)
+");
+         
+          return DBManager<OrderResult>.ExecuteReader(sql, new
+            {
+                from = from,
+                to = to,
+                cust_id = cust_id,
+                status = status
+            });
+        }
+      
+        public dynamic GetExport(string from = "", string to = "", string cust_id = "", string status = "")
         {
             var sql = string.Format(@"SELECT O.*,CUS.NAME,E.EMP_NAME,
 (SELECT TOP 1 NAME FROM END_USER WHERE CUS_ID=O.END_USER) as END_USER_NAME
 FROM ORDERED AS O
 INNER JOIN CUSTOMER AS CUS ON O.CUSTOMER_ID=CUS.ID INNER JOIN EMPLOYEE AS E ON E.EMP_ID=O.EMP_ID
-WHERE (@month='' OR ORDED_DATE LIKE @month+'%')
+WHERE (@from ='' OR ORDED_DATE BETWEEN @from AND @to)
             AND (@cust_id='' OR CUSTOMER_ID=@cust_id) AND(@status='' OR ORD_STAT=@status)
 ");
 
             return DBManager<ORDERED>.ExecuteDynamic(sql, new
             {
-              
-                month = month,
+                from = from,
+                to = to,
                 cust_id = cust_id,
                 status = status
             });
         }
 
-        public virtual int GetCount(string month = "", string cust_id = "", string status = "")
+        public virtual int GetCount(string from = "", string to = "", string cust_id = "", string status = "")
         {
-            var sql = string.Format(@"SELECT COUNT(1) AS CNT FROM ORDERED WHERE (@month='' OR ORDED_DATE LIKE @month+'%')
+            var sql = string.Format(@"SELECT COUNT(1) AS CNT FROM ORDERED WHERE (@from ='' OR ORDED_DATE BETWEEN @from AND @to)
             AND (@cust_id='' OR CUSTOMER_ID=@cust_id) AND(@status='' OR ORD_STAT=@status);");
             return (int)DBManager<ORDERED>.ExecuteScalar(sql, new
             {
-
-                month = month,
+                from = from,
+                to = to,
                 cust_id = cust_id,
                 status = status
             });
@@ -97,7 +128,7 @@ WHERE (@month='' OR ORDED_DATE LIKE @month+'%')
             decimal BIDD_PRICE, string CONTRACT_NO, string ORD_USAGE, string ORD_STAT, string END_USER, int QUANTITY, string DELIVERY_TIME, string REMARK)
         {
             var id = this.GenerateId();
-            var sql = "INSERT INTO ORDERED(ID,EMP_ID,ORDED_DATE,CUSTOMER_ID,ORDER_CR_HR,STS_ST_CLS,STS_ST_SER,SURFACE_CD,ORD_THK,ORD_WTH,ORD_EDGE,ORD_WGT,BASE_PRICE,EFFECT_PRICE,BIDD_PRICE,CONTRACT_NO,ORD_USAGE,ORD_STAT,END_USER,QUANTITY,DELIVERY_TIME,REMARK) VALUES(@ID,@EMP_ID,@ORDED_DATE,@CUSTOMER_ID,@ORDER_CR_HR,@STS_ST_CLS,@STS_ST_SER,@SURFACE_CD,@ORD_THK,@ORD_WTH,@ORD_EDGE,@ORD_WGT,@BASE_PRICE,@EFFECT_PRICE,@BIDD_PRICE,@CONTRACT_NO,@ORD_USAGE,@ORD_STAT,@END_USER,@QUANTITY,@DELIVERY_TIME,@REMARK)";
+            var sql = "INSERT INTO ORDERED(ID,EMP_ID,ORDED_DATE,CUSTOMER_ID,ORDER_CR_HR,STS_ST_CLS,STS_ST_SER,SURFACE_CD,ORD_THK,ORD_WTH,ORD_EDGE,ORD_WGT,BASE_PRICE,EFFECT_PRICE,BIDD_PRICE,CONTRACT_NO,ORD_USAGE,ORD_STAT,END_USER,QUANTITY,DELIVERY_TIME,REMARK,CREATE_AT) VALUES(@ID,@EMP_ID,@ORDED_DATE,@CUSTOMER_ID,@ORDER_CR_HR,@STS_ST_CLS,@STS_ST_SER,@SURFACE_CD,@ORD_THK,@ORD_WTH,@ORD_EDGE,@ORD_WGT,@BASE_PRICE,@EFFECT_PRICE,@BIDD_PRICE,@CONTRACT_NO,@ORD_USAGE,@ORD_STAT,@END_USER,@QUANTITY,@DELIVERY_TIME,@REMARK, GETDATE())";
             return DBManager<ORDERED>.Execute(sql, new
             {
                 ID = id,

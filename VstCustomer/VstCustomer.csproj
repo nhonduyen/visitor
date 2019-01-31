@@ -144,6 +144,8 @@
     <Compile Include="Models\Paging\DataTables.cs" />
     <Compile Include="Models\STD_CODE.cs" />
     <Compile Include="Models\VIST_CONTACTOR.cs" />
+    <Compile Include="Models\OrderReport.cs" />
+    <Compile Include="Models\OrderResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -200,6 +202,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Template\" />
     <Folder Include="Upload\" />
   </ItemGroup>
   <ItemGroup>

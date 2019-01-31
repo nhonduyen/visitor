@@ -11,8 +11,12 @@
 
     <div class="form-inline">
         <div class="form-group">
-            <label for="from">Month:</label>
-            <input type="text" class="form-control" style="width:100px;" id="month" value="@DateTime.Now.ToString("yyyy-MM")">
+            <label for="from">From:</label>
+            <input type="text" class="form-control" style="width:100px;" id="from" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+        </div>
+         <div class="form-group">
+            <label for="from">To:</label>
+            <input type="text" class="form-control" style="width:100px;" id="to" value="@DateTime.Now.ToString("yyyy-MM-dd")">
         </div>
         <div class="form-group">
             <label for="to">Customer:</label>
@@ -39,6 +43,7 @@
     <button id="btnModify" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span>Modify</button>
     <button id="btnCopy" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-copy"></span>Copy</button>
     <button id="btnExport" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-export"></span>Export</button>
+    <button id="btnExportReport" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-export"></span>Export Report</button>
     <button id="btnDel" data-ideaid="" type="button" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span>Delete</button>
 </div>
 <div class="table-responsive">
@@ -67,6 +72,7 @@
                 <th style="white-space:nowrap; min-width:150px;">Employee</th>
                 <th>Delivery</th>
                 <th>Remark</th>
+                <th>Created at</th>
             </tr>
 
         </thead>
